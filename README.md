@@ -1,5 +1,24 @@
 # <a href="#"><img src="media/BLAKE3.svg" alt="BLAKE3" height=50></a>
 
+## GPU Fork Results
+This library uses the Vulkan SDK to run hashes on the GPU. The results make this method completely impractical for actual use, but are cool as a proof-of-concept.
+
+b3sum was compiled once with standard `cargo build --release`, and once with `cargo rustc --features "vulkan"  --release`. These are named b3cpu and b3gpu respectively below.
+
+I ran these tests on a rented AWS g4dn.4xlarge machine with 16vCPU (Xeon Platinum 8259CL, 2.5GHz base 3.5GHz boost), 64GB of RAM, and a Tesla T4 GPU, which is essentially a slightly worse RTX 2060. I wrote a 50GB file full of random data to a ramdisk, and then used the command  `taskset -c 0-<cores> time ./<function> /mnt/ram/test.dat` to hash the files.
+
+The results are as expected: the GPU actually performs slightly worse than a single core.
+
+| Function | 16c | 8c | 4c | 2c | 1c | GPU |
+| --- | --- | --- | --- | --- | --- | --- |
+| SHA256 | | | | | 146.74  | |
+| b3cpu | 2.05 | 2.26 | 3.80 | 6.89 | 13.02 | |
+| b3gpu | | | | | | 14.22 |
+
+I used sha256 as a point of comparison from the openssl library, but note that only runs on 1 core. And yes, I monitored both `top` and `nvidia-smi` throughout to make sure everything was running on the correct cores & devices.
+
+## Original README
+
 BLAKE3 is a cryptographic hash function that is:
 
 - **Much faster** than MD5, SHA-1, SHA-2, SHA-3, and BLAKE2.
