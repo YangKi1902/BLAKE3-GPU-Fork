@@ -65,7 +65,7 @@ impl Gpu {
     }
 }
 
-fn hash_file(
+pub fn hash_file(
     instance: &mut GpuInstance,
     base_hasher: &GpuHasher,
     file: &File,
