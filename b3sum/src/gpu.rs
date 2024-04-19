@@ -79,7 +79,7 @@ pub fn hash_file(
     hash(instance, base_hasher, &map)
 }
 
-fn hash(
+pub fn hash(
     instance: &mut GpuInstance,
     base_hasher: &GpuHasher,
     mut data: &[u8],
