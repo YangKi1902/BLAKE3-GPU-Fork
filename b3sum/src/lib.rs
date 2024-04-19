@@ -1,2 +1,2 @@
-mod gpu;
-mod vulkan;
+pub mod gpu;
+pub mod vulkan;
